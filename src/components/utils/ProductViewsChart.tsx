@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import  { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
 const ProductViewsChart = () => {
-  const chartContainer = useRef(null);
-  const chartInstance = useRef(null);
+  const chartContainer = useRef<HTMLCanvasElement | null>(null);
+  const chartInstance = useRef<Chart<"line", number[], string> | null>(null);
+  
 
   useEffect(() => {
     if (chartInstance.current !== null) {
@@ -11,8 +12,10 @@ const ProductViewsChart = () => {
     }
 
     if (chartContainer.current !== null) {
-      const ctx = chartContainer.current.getContext("2d");
-      chartInstance.current = new Chart(ctx, {
+      const ctx = chartContainer.current?.getContext("2d") as CanvasRenderingContext2D | null;
+
+      chartInstance.current = new Chart(ctx!, {
+
         type: "line",
         data: {
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -39,6 +42,7 @@ const ProductViewsChart = () => {
         chartInstance.current.destroy();
       }
     };
+    
   }, []);
 
   return <canvas ref={chartContainer} />;
